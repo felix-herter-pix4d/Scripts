@@ -16,10 +16,10 @@ if [ -d ${TICKET_FOLDER} ]; then
     exit 1
 fi
 
-mkdir -p ${TICKET_FOLDER}/{Data,Images,Output,Process/Scripts,Process/OPF}
+mkdir -p ${TICKET_FOLDER}/{Data,Images,Output,Process/OPF,Process/DSM}
 
 # write config script
-CONFIG_FILE=${TICKET_FOLDER}/Process/Scripts/config.txt
+CONFIG_FILE=${TICKET_FOLDER}/Process/config.txt
 
 echo \
 "[pipeline]
@@ -34,7 +34,9 @@ use_gpu = yes/no
 opfProject = ${TICKET_FOLDER}/Process/OPF/project.json
 
 [output]
-filename = ${TICKET_FOLDER}/Output/out.tif
+filename = ${TICKET_FOLDER}/Output/<OUTFOLDER>/<ORTHO>.tif
 
 [dsm]
 files_pattern = ${TICKET_FOLDER}/Process/DSM/<FILENAMES_USING_{row}_{col}>.tiff" > ${CONFIG_FILE}
+
+ln -s ~/Scripts/rto.sh ${TICKET_FOLDER}/Process/rto.sh
