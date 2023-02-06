@@ -36,6 +36,9 @@ opfProject = ${TICKET_FOLDER}/Process/OPF/project.json
 [output]
 filename = ${TICKET_FOLDER}/Output/<OUTFOLDER>/<ORTHO>.tif
 
+[color_balance]
+debug_tiles_path = ${TICKET_FOLDER}/Output/<OUTFOLDER>/debug/
+
 [dsm]
 files_pattern = ${TICKET_FOLDER}/Process/DSM/<FILENAMES_USING_{row}_{col}>.tiff" > ${CONFIG_FILE}
 

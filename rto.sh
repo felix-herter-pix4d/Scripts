@@ -1,6 +1,8 @@
 #!/bin/bash
 
 #run test_ortho (rto)
+code_repo_folder=/home/fherter/Code/pix4d-rag/
+binary="${code_repo_folder}/build-fastmap-Release/bin/test_ortho"
 
 #---------------------------------------------------------------------constants
 ID_LENGTH=2
@@ -60,6 +62,14 @@ make_red() {
     #echo -e "I ${RED}love${NC} Stack Overflow"
 }
 
+get_HEAD_sha() {
+    echo $(git -C ${1} rev-parse HEAD)
+}
+
+get_patch () {
+    echo "$(git -C ${1} diff)"
+}
+
 #-----------------------------------------------------------------sanity checks
 # config exists
 if [[ ! -f config.txt ]]; then
@@ -68,7 +78,6 @@ if [[ ! -f config.txt ]]; then
 fi
 
 # binary exists
-binary=/home/fherter/Code/pix4d-rag/build-fastmap-Release/bin/test_ortho
 if [[ -f $binary ]]
 then
     echo "bin: '"$binary"'"
@@ -85,8 +94,6 @@ else
     exit 1
 fi
 
-echo $seconds
-
 #-------------------------------------------------------------------identifiers
 experiment_name=$(echo $* | tr -s ' ' | sed 's/ /_/g')
 next_id=$(get_next_id)
@@ -96,7 +103,8 @@ ortho_name=${folder_name}_ortho
 
 #------------------------------------------------------------------------set-up
 
-mkdir $output_folder
+mkdir "${output_folder}"
+mkdir "${output_folder}/debug"
 
 # create config
 config=$(cat config.txt)
@@ -108,6 +116,22 @@ echo "$config" >> $config_path
 
 log_name=${next_id}_log.txt
 log_path=${output_folder}/${log_name}
+
+# create readme.txt tracking code version info
+readme_path=$output_folder/readme.txt
+
+echo "${folder_name}" >> ${readme_path}
+echo >> ${readme_path}
+echo "--------------------notes--------------------" >> ${readme_path}
+echo >> ${readme_path}
+echo "---------------------sha---------------------" >> ${readme_path}
+echo >> ${readme_path}
+echo $(get_HEAD_sha ${code_repo_folder}) >> ${readme_path}
+echo >> ${readme_path}
+echo "--------------------patch--------------------" >> ${readme_path}
+echo >> ${readme_path}
+echo "$(get_patch ${code_repo_folder})" >> ${readme_path}
+echo >> ${readme_path}
 
 #--------------------------------------------------------------------here we go
 ${binary} -f $config_path | tee $log_path
