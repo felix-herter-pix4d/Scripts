@@ -102,7 +102,6 @@ output_folder=../Output/${folder_name} # synchronized with path in config.txt
 ortho_name=${folder_name}_ortho
 
 #------------------------------------------------------------------------set-up
-
 mkdir "${output_folder}"
 mkdir "${output_folder}/debug"
 
